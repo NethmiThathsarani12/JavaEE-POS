@@ -1,11 +1,11 @@
-package lk.ijse.gdse66.POS_BackEnd;
+package lk.ijse.gdse66.POS_BackEnd.servlet;
 
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
-public class HelloServlet extends HttpServlet {
+public class CustomerServlet extends HttpServlet {
     private String message;
 
     public void init() {
