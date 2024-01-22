@@ -100,27 +100,27 @@
                 <div class="card border-success " style="max-width: 25rem; height: 480px;">
                     <div class="card-header text-white bg-success">Customer Form</div>
                     <div class="card-body m-3">
-                        <form>
+                        <form id="customerForm">
                             <div class="row mb-4 justify-content-center">
                                 <div class="mb-1">
                                     <label for="txtCustomerID">Customer ID</label>
-                                    <input class="form-control" id="txtCustomerID" required type="text">
+                                    <input name="txtCustomerID" class="form-control" id="txtCustomerID" required type="text">
                                     <span class="control-error" id="lblcusid"></span>
                                 </div>
                                 <div class="mb-1">
                                     <label for="txtCustomerName">Customer Name</label>
-                                    <input class="form-control" id="txtCustomerName" type="text">
+                                    <input name="txtCustomerName" class="form-control" id="txtCustomerName" type="text">
                                     <span class="control-error" id="lblcusname"></span>
                                 </div>
                                 <div class="mb-1">
                                     <label for="txtCustomerAddress">Customer Address</label>
-                                    <input class="form-control" id="txtCustomerAddress" type="text">
+                                    <input name="txtCustomerAddress" class="form-control" id="txtCustomerAddress" type="text">
                                     <span class="control-error" id="lblcusaddress"></span>
                                 </div>
                                 <div class="mb-1">
-                                    <label for="txtCustomerSalary">Customer Salary</label>
-                                    <input class="form-control" id="txtCustomerSalary" type="text">
-                                    <span class="control-error" id="lblcussalary"></span>
+                                    <label for="txtCustomerContact">Customer Contact</label>
+                                    <input name="txtCustomerContact" class="form-control" id="txtCustomerContact" type="text">
+                                    <span class="control-error" id="lblcusContact"></span>
                                 </div>
                                 <div class="btn-group " role="group" aria-label="Basic example">
                                     <button id="btnCustomer" type="button" class="btn btn-danger" style="width: 100px">Save</button>
@@ -361,6 +361,7 @@
 <script src="assets/js/bootstrap.js"></script>
 
 <script src="controller/dashboardController.js"></script>
+<script src="controller/customerController.js"></script>
 <script>
 
     
