@@ -3,20 +3,23 @@ package lk.ijse.gdse66.POS_BackEnd.servlet;
 import lk.ijse.gdse66.POS_BackEnd.bo.BOFactory;
 import lk.ijse.gdse66.POS_BackEnd.bo.custom.CustomerBO;
 import lk.ijse.gdse66.POS_BackEnd.dto.CustomerDTO;
-import sun.jvm.hotspot.debugger.DataSource;
 
 import java.io.*;
 import java.sql.Connection;
+import java.sql.SQLException;
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
+import javax.sql.DataSource;
+
 
 @WebServlet(name = "customerServlet", urlPatterns = "/customer")
 public class CustomerServlet extends HttpServlet {
     private String message;
 
-
-    DataSource dataSource;
+    @Resource(name = "java:comp/env/jdbc/pool")
+   DataSource dataSource;
 
     private final CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
@@ -36,24 +39,14 @@ public class CustomerServlet extends HttpServlet {
 
         resp.addHeader("Access-Control-Allow-Origin", "*");
 
-//        try {
-//            connection = dataSource.getConnection();
-//
-//            CustomerDTO customerDTO = new CustomerDTO(
-//                    req.getParameter("cusId"),
-//                    req.getParameter("cusName"),
-//                    req.getParameter("cusAddress"),
-//                    req.getParameter("cusTp")
-//            );
-//
-//            try {
-//                if (customerBO.addCustomer(connection, customerDTO)){
-//
-//                }
-//            }
-//    }
+       try {
+           connection = dataSource.getConnection();
+       } catch (SQLException e) {
+           e.printStackTrace();
+       }
 
-}
+
+    }
 
     public void destroy() {
     }
