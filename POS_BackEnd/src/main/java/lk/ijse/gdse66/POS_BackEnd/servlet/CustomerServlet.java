@@ -26,10 +26,16 @@ public class CustomerServlet extends HttpServlet {
     private final CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
 
-    public void init() {
-        message = "Hello World!";
-    }
+//    public void init() {
+//        message = "Hello World!";
+//    }
 
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,10 +51,10 @@ public class CustomerServlet extends HttpServlet {
             connection = dataSource.getConnection();
 
             CustomerDTO customerDTO = new CustomerDTO(
-                    req.getParameter("cusId"),
-                    req.getParameter("cusName"),
-                    req.getParameter("cusAddress"),
-                    req.getParameter("cusTp")
+                    req.getParameter("txtCustomerID"),
+                    req.getParameter("txtCustomerName"),
+                    req.getParameter("txtCustomerAddress"),
+                    req.getParameter("txtCustomerContact")
             );
 
             try {
@@ -84,6 +90,13 @@ public class CustomerServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "DELETE, PUT");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
     }
 
     public void destroy() {

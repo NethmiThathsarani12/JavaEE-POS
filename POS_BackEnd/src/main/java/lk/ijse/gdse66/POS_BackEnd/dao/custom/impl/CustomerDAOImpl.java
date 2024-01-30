@@ -12,7 +12,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public boolean add(CustomerEntity customerEntity, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection, "INSERT INTO customer VALUES(?,?,?,?)" , customerEntity.getId(),
+        return CrudUtil.executeUpdate(connection, "INSERT INTO company.customer (id,name,address,contact) VALUES(?,?,?,?)" , customerEntity.getId(),
                customerEntity.getName(),customerEntity.getAddress(),customerEntity.getContact());
     }
 }
