@@ -1,5 +1,7 @@
 package lk.ijse.gdse66.POS_BackEnd.bo.custom.impl;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lk.ijse.gdse66.POS_BackEnd.bo.custom.CustomerBO;
 import lk.ijse.gdse66.POS_BackEnd.dao.DAOFactory;
 import lk.ijse.gdse66.POS_BackEnd.dao.custom.CustomerDAO;
@@ -22,7 +24,39 @@ public class CustomerBOImpl implements CustomerBO {
         return customerDAO.add(customerEntity,connection);
     }
 
+    @Override
+    public ObservableList<CustomerDTO> getAllCustomer(Connection connection) throws SQLException, ClassNotFoundException {
+       ObservableList<CustomerEntity> customerEntities = customerDAO.getAll(connection);
 
+       ObservableList<CustomerDTO> obList =  FXCollections.observableArrayList();
+
+       for (CustomerEntity temp : customerEntities){
+           CustomerDTO customerDTO = new CustomerDTO(
+                   temp.getId(),
+                   temp.getName(),
+                   temp.getAddress(),
+                   temp.getContact()
+           );
+
+           obList.add(customerDTO);
+       }
+
+       return obList;
+    }
+
+    @Override
+    public CustomerDTO searchCustomer(String id, Connection connection) throws SQLException, ClassNotFoundException {
+       CustomerEntity customerEntity = customerDAO.search(id,connection);
+
+       CustomerDTO customerDTO = new CustomerDTO(
+               customerEntity.getId(),
+               customerEntity.getName(),
+               customerEntity.getAddress(),
+               customerEntity.getContact()
+       );
+       return customerDTO;
+
+    }
 
 
 }

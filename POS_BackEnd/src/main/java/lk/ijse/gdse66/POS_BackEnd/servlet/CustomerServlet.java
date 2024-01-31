@@ -1,7 +1,9 @@
 package lk.ijse.gdse66.POS_BackEnd.servlet;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObjectBuilder;
+import javafx.collections.ObservableList;
 import lk.ijse.gdse66.POS_BackEnd.bo.BOFactory;
 import lk.ijse.gdse66.POS_BackEnd.bo.custom.CustomerBO;
 import lk.ijse.gdse66.POS_BackEnd.dto.CustomerDTO;
@@ -34,7 +36,61 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        resp.addHeader("Access-Control-Allow-Origin", "*");
+        try {
+
+            String option = req.getParameter("option");
+            String customerID = req.getParameter("cusId");
+            resp.setContentType("application/json");
+            Connection connection = dataSource.getConnection();
+            PrintWriter writer = resp.getWriter();
+
+            resp.addHeader("Access-Control-Allow-Origin", "*");
+
+            switch (option) {
+                case "SEARCH":
+
+                    CustomerDTO customer = customerBO.searchCustomer(customerID, connection);
+                    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+
+                    objectBuilder.add("id", customer.getCusId());
+                    objectBuilder.add("name", customer.getCusName());
+                    objectBuilder.add("address", customer.getCusAddress());
+                    objectBuilder.add("contact", customer.getCusContact());
+
+                    writer.print(objectBuilder.build());
+
+                    break;
+
+                case "GETALL":
+
+                    ObservableList<CustomerDTO> allCustomers = customerBO.getAllCustomer(connection);
+                    JsonArrayBuilder arrayBuilder1 = Json.createArrayBuilder();
+
+                    for (CustomerDTO cust : allCustomers) {
+
+                        JsonObjectBuilder objectBuilder1 = Json.createObjectBuilder();
+                        objectBuilder1.add("id", cust.getCusId());
+                        objectBuilder1.add("name", cust.getCusName());
+                        objectBuilder1.add("address", cust.getCusAddress());
+                        objectBuilder1.add("contact", cust.getCusContact());
+                        arrayBuilder1.add(objectBuilder1.build());
+
+                    }
+
+                    JsonObjectBuilder response1 = Json.createObjectBuilder();
+                    response1.add("status", 200);
+                    response1.add("message", "Done");
+                    response1.add("data", arrayBuilder1.build());
+                    writer.print(response1.build());
+
+                    break;
+            }
+
+            connection.close();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
 
