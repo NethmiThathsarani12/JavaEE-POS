@@ -58,5 +58,16 @@ public class CustomerBOImpl implements CustomerBO {
 
     }
 
+    @Override
+    public boolean updateCustomer(Connection connection, CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
+       CustomerEntity customerEntity = new CustomerEntity(
+               customerDTO.getCusId(),
+               customerDTO.getCusName(),
+               customerDTO.getCusAddress(),
+               customerDTO.getCusContact()
+       );
+       return customerDAO.update(customerEntity,connection);
+    }
+
 
 }

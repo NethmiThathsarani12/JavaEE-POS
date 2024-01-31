@@ -51,6 +51,41 @@ function loadAllCustomer(){
     });
 
 
+    $("#btnUpdate").click(function (){
+        let cusOb = {
+            id: $("#txtCustomerID").val(),
+            name: $("#txtCustomerName").val(),
+            address: $("#txtCustomerAddress").val(),
+            contact: $("#txtCustomerContact").val()
+        };
+
+        $.ajax({
+            url: "http://localhost:8080/backEnd/customer",
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(cusOb),
+
+            success: function (res){
+                if (res.status == 200) {
+                    alert(res.message);
+                    resetCustomer();
+                    loadAllCustomer()
+                } else if (res.status == 400) {
+                    alert(res.message);
+                } else {
+                    alert(res.data);
+                }
+            },
+            error: function (ob, errorStus) {
+                console.log(ob);
+                console.log(errorStus);
+            }
+
+        });
+    });
+
+
+
     function bindClickEvents(){
             $("#tblCustomer>tr").click(function (){
                 let cusId = $(this).children().eq(0).text();
