@@ -15,4 +15,5 @@ public class CustomerDAOImpl implements CustomerDAO {
         return CrudUtil.executeUpdate(connection, "INSERT INTO company.customer (id,name,address,contact) VALUES(?,?,?,?)" , customerEntity.getId(),
                customerEntity.getName(),customerEntity.getAddress(),customerEntity.getContact());
     }
+
 }

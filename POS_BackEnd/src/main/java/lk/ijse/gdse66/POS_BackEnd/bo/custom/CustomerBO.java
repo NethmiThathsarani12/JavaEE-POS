@@ -9,4 +9,6 @@ import java.sql.SQLException;
 public interface CustomerBO extends SuperBO {
 
     boolean addCustomer(Connection connection, CustomerDTO customerDTO) throws SQLException, ClassNotFoundException;
+
+//    ObservableList<CustomerDTO> getAllCustomer(Connection connection) throws SQLException, ClassNotFoundException;
 }

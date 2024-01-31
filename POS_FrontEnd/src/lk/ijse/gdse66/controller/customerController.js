@@ -1,3 +1,5 @@
+loadAllCustomer();
+
 $("#btnCustomer").click(function (){
 
     let data = $("#customerForm").serialize();
@@ -27,10 +29,17 @@ $("#btnCustomer").click(function (){
     });
 });
 
+function resetCustomer(){
+        $("#txtCustomerID").val("");
+        $("#txtCustomerName").val("");
+        $("#txtCustomerAddress").val();
+        $("#txtCustomerContact").val();
+}
+
 function loadAllCustomer(){
     $("#tblCustomer").empty();
     $.ajax({
-        url: "http://localhost:8080/backEnd/customer-servlet?option=GETALL",
+        url: "http://localhost:8080/backEnd/customer?option=GETALL",
         method: "GET",
         success: function (resp) {
             for (const customer of resp.data){
@@ -40,5 +49,23 @@ function loadAllCustomer(){
             bindClickEvents();
         }
     });
+
+
+    function bindClickEvents(){
+            $("#tblCustomer>tr").click(function (){
+                let cusId = $(this).children().eq(0).text();
+                let name = $(this).children().eq(1).text();
+                let address = $(this).children().eq(2).text();
+                let contact = $(this).children().eq(3).text();
+
+                $("#txtCustomerID").val(cusId);
+                $("#txtCustomerName").val(name);
+                $("#txtCustomerAddress").val(address);
+                $("#txtCustomerContact").val(contact);
+            });
+
+
+
+    }
 }
 
