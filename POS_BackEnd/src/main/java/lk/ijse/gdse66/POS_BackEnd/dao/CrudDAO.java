@@ -17,4 +17,6 @@ public interface CrudDAO <T, ID,C> extends SuperDAO{
 
     boolean update(T t, Connection connection) throws SQLException,ClassNotFoundException;
 
+    boolean delete(ID id, Connection connection) throws SQLException,ClassNotFoundException;
+
 }

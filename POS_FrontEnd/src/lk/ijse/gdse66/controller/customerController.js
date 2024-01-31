@@ -32,24 +32,24 @@ $("#btnCustomer").click(function (){
 function resetCustomer(){
         $("#txtCustomerID").val("");
         $("#txtCustomerName").val("");
-        $("#txtCustomerAddress").val();
-        $("#txtCustomerContact").val();
+        $("#txtCustomerAddress").val("");
+        $("#txtCustomerContact").val("");
 }
 
-function loadAllCustomer(){
+function loadAllCustomer() {
     $("#tblCustomer").empty();
     $.ajax({
         url: "http://localhost:8080/backEnd/customer?option=GETALL",
         method: "GET",
         success: function (resp) {
-            for (const customer of resp.data){
+            for (const customer of resp.data) {
                 let row = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.contact}</td></tr>`;
                 $("#tblCustomer").append(row);
             }
             bindClickEvents();
         }
     });
-
+}
 
     $("#btnUpdate").click(function (){
         let cusOb = {
@@ -64,7 +64,6 @@ function loadAllCustomer(){
             method: "PUT",
             contentType: "application/json",
             data: JSON.stringify(cusOb),
-
             success: function (res){
                 if (res.status == 200) {
                     alert(res.message);
@@ -84,6 +83,35 @@ function loadAllCustomer(){
         });
     });
 
+$("#btnDelete").click(function (){
+    let customerID = $("#txtCustomerID").val();
+
+    $.ajax({
+        url: "http://localhost:8080/backEnd/customer?txtCustomerID=" + customerID,
+        method: "DELETE",
+
+        success: function (res) {
+            console.log(res);
+            if (res.status == 200) {
+                alert(res.message);
+                resetCustomer();
+                loadAllCustomer();
+            } else if (res.status == 400) {
+                alert(res.data);
+            } else {
+                alert(res.data);
+            }
+
+        },
+        error: function (ob, status, t) {
+            console.log(ob);
+            console.log(status);
+            console.log(t);
+        }
+    });
+});
+
+
 
 
     function bindClickEvents(){
@@ -98,9 +126,6 @@ function loadAllCustomer(){
                 $("#txtCustomerAddress").val(address);
                 $("#txtCustomerContact").val(contact);
             });
-
-
-
     }
-}
+
 

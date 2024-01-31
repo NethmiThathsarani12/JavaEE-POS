@@ -64,6 +64,11 @@ public class CustomerDAOImpl implements CustomerDAO {
         return CrudUtil.executeUpdate(connection,"UPDATE customer SET name=?,address=?,contact=? WHERE id=?", customerEntity.getName(),
                 customerEntity.getAddress(),customerEntity.getContact(),customerEntity.getId());
     }
+
+    @Override
+    public boolean delete(String id, Connection connection) throws SQLException, ClassNotFoundException {
+        return CrudUtil.executeUpdate(connection, "DELETE FROM customer WHERE id=?", id);
+    }
 }
 
 
