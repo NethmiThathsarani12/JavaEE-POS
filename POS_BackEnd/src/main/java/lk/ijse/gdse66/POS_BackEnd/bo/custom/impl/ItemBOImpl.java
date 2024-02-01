@@ -56,4 +56,15 @@ public class ItemBOImpl implements ItemBO {
         );
         return itemDTO;
     }
+
+    @Override
+    public boolean updateItem(Connection connection, ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
+        ItemEntity itemEntity = new ItemEntity(
+                itemDTO.getItemCode(),
+                itemDTO.getDescription(),
+                itemDTO.getQtyOnHand(),
+                itemDTO.getUnitPrice()
+        );
+        return itemDAO.update(itemEntity,connection);
+    }
 }

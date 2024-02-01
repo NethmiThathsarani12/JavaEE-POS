@@ -70,3 +70,33 @@ function bindClickEvent() {
         $("#txtQty").val(qtyOnHand);
     });
 }
+
+$("#btnItemUpdate").click(function (){
+    let itemOb = {
+        itemCode: $("#txtItemId").val(),
+        itemName: $("#txtItemName").val(),
+        itemQty: $("#txtQty").val(),
+        itemPrice: $("#txtPrice").val()
+    };
+    $.ajax({
+        url: "http://localhost:8080/backEnd/item",
+        method: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(itemOb),
+        success: function (res){
+            if (res.status == 200){
+                alert(res.message);
+                resetItem();
+                loadAllItem();
+            } else if (res.status == 400){
+                alert(res.message);
+            } else {
+                alert(res.data);
+            }
+        },
+        error: function (ob, errorStus) {
+            console.log(ob);
+            console.log(errorStus);
+        }
+    });
+});
