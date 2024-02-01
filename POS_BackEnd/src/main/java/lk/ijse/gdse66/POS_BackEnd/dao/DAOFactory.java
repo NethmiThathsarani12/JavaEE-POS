@@ -1,6 +1,7 @@
 package lk.ijse.gdse66.POS_BackEnd.dao;
 
 import lk.ijse.gdse66.POS_BackEnd.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.gdse66.POS_BackEnd.dao.custom.impl.ItemDAOImpl;
 
 public class DAOFactory {
 
@@ -21,6 +22,8 @@ public class DAOFactory {
         switch (types){
             case CUSTOMER:
                 return new CustomerDAOImpl();
+            case ITEM:
+               return new ItemDAOImpl();
             default:
                 return null;
         }
@@ -31,6 +34,6 @@ public class DAOFactory {
 
 
     public enum DAOTypes{
-        CUSTOMER
+        CUSTOMER , ITEM
     }
 }

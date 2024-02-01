@@ -1,6 +1,7 @@
 package lk.ijse.gdse66.POS_BackEnd.bo;
 
 import lk.ijse.gdse66.POS_BackEnd.bo.custom.impl.CustomerBOImpl;
+import lk.ijse.gdse66.POS_BackEnd.bo.custom.impl.ItemBOImpl;
 
 public class BOFactory {
 
@@ -21,6 +22,8 @@ public class BOFactory {
         switch (types){
             case CUSTOMER:
                 return new CustomerBOImpl();
+            case ITEM:
+                return new ItemBOImpl();
             default:
                 return null;
         }

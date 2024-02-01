@@ -1,0 +1,138 @@
+package lk.ijse.gdse66.POS_BackEnd.servlet;
+
+import jakarta.json.*;
+import javafx.collections.ObservableList;
+import lk.ijse.gdse66.POS_BackEnd.bo.BOFactory;
+import lk.ijse.gdse66.POS_BackEnd.bo.custom.ItemBO;
+import lk.ijse.gdse66.POS_BackEnd.dto.ItemDTO;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+@WebServlet(name = "itemServlet" , urlPatterns = "/item")
+public class ItemServlet extends HttpServlet {
+
+    @Resource(name = "java:comp/env/jdbc/pool")
+    DataSource dataSource;
+
+    private final ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
+
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            String option = req.getParameter("option");
+            String code = req.getParameter("iCode");
+            resp.setContentType("application/json");
+            Connection connection = dataSource.getConnection();
+            PrintWriter writer = resp.getWriter();
+
+            resp.addHeader("Access-Control-Allow-Origin", "*");
+
+            switch (option) {
+                case "SEARCH":
+
+                    ItemDTO itemDTO1 = itemBO.searchItem(code, connection);
+                    JsonObjectBuilder objectBuilder1 = Json.createObjectBuilder();
+
+                    objectBuilder1.add("itemCode", itemDTO1.getItemCode());
+                    objectBuilder1.add("name", itemDTO1.getDescription());
+                    objectBuilder1.add("qtyOnHand", itemDTO1.getQtyOnHand());
+                    objectBuilder1.add("price", itemDTO1.getUnitPrice());
+
+                    writer.print(objectBuilder1.build());
+
+                    break;
+
+                case "GETALL":
+
+                    ObservableList<ItemDTO> allItems = itemBO.getAllItem(connection);
+                    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+
+                    for (ItemDTO itemDTO : allItems) {
+
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        objectBuilder.add("itemCode", itemDTO.getItemCode());
+                        objectBuilder.add("itemName", itemDTO.getDescription());
+                        objectBuilder.add("itemQty", itemDTO.getQtyOnHand());
+                        objectBuilder.add("itemPrice", itemDTO.getUnitPrice());
+                        arrayBuilder.add(objectBuilder.build());
+
+                    }
+
+                    JsonObjectBuilder response1 = Json.createObjectBuilder();
+                    response1.add("status", 200);
+                    response1.add("message", "Done");
+                    response1.add("data", arrayBuilder.build());
+                    writer.print(response1.build());
+
+                    break;
+            }
+
+            connection.close();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+
+        try (PrintWriter writer = resp.getWriter();
+             Connection connection = dataSource.getConnection()) {
+
+            JsonReader reader = Json.createReader(req.getReader());
+            JsonObject jsonObject = reader.readObject();
+
+            try {
+                ItemDTO itemDTO = new ItemDTO(
+                        jsonObject.getString("itemCode"),
+                        jsonObject.getString("itemName"),
+                        Integer.parseInt(jsonObject.getString("itemQty")),
+                        Double.parseDouble(jsonObject.getString("itemPrice"))
+                );
+
+                if (itemBO.addItem(connection, itemDTO)) {
+                    JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                    resp.setStatus(HttpServletResponse.SC_CREATED);
+                    objectBuilder.add("status", 200);  // Changed to 201 for resource creation
+                    objectBuilder.add("message", "Successfully Added");
+                    objectBuilder.add("data", "");
+                    writer.print(objectBuilder.build());
+                }
+            } catch (NumberFormatException | SQLException | ClassNotFoundException e) {
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                objectBuilder.add("status", 400);
+                objectBuilder.add("message", "Error");
+                objectBuilder.add("data", e.getMessage());
+                writer.print(objectBuilder.build());
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "DELETE, PUT");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
+    }
+}
