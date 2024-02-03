@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderDetailsEntity {
 
-    private String oId;
-    private String iCode;
+    private String oid;
+    private String itemCode;
     private int qty;
-    private double price;
+    private double unitPrice;
     private double total;
 }

@@ -11,9 +11,9 @@ import java.sql.Date;
 @AllArgsConstructor
 public class OrdersEntity {
 
-    private String orderId;
-    private String cId;
-    private Date orderDate;
+    private String oid;
+    private String customerID;
+    private Date date;
     private double total;
     private double discount;
     private double subTotal;
