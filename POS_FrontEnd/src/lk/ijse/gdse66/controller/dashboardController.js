@@ -42,13 +42,13 @@ lnkOrder.addEventListener("click",function (){
     item.style.display ='none';
     dash.style.display = 'none';
     
-    loadAllCusID();
-    loadAllItemID();
-    setOrderId();
-    setDate();
+    // loadAllCusID();
+    // loadAllItemID();
+    // setOrderId();
+    // setDate();
 })
 
-function cusCount(){
-    var arrayLength = customerDB.length;
-    $('#cusCount').text(arrayLength);
-}
+// function cusCount(){
+//     var arrayLength = customerDB.length;
+//     $('#cusCount').text(arrayLength);
+// }

@@ -15,7 +15,7 @@ public class CrudUtil {
         return pstm;
     }
 
-    public static boolean  executeUpdate(Connection connection, String sql, Object... args) throws SQLException, ClassNotFoundException {
+    public static boolean executeUpdate(Connection connection, String sql, Object... args) throws SQLException, ClassNotFoundException {
         return getPreparedStatement(connection, sql, args).executeUpdate() > 0;
     }
 

@@ -7,19 +7,19 @@ public class BOFactory {
 
     private static BOFactory boFactory;
 
-    private BOFactory(){
+    private BOFactory() {
 
     }
 
-    public static BOFactory getBoFactory(){
-        if (boFactory == null){
+    public static BOFactory getBoFactory() {
+        if (boFactory == null) {
             boFactory = new BOFactory();
         }
-        return  boFactory;
+        return boFactory;
     }
 
-  public SuperBO getBO(BOTypes types){
-        switch (types){
+    public SuperBO getBO(BOTypes types) {
+        switch (types) {
             case CUSTOMER:
                 return new CustomerBOImpl();
             case ITEM:
@@ -30,7 +30,7 @@ public class BOFactory {
 
     }
 
-        public enum BOTypes{
-        CUSTOMER,ITEM
-        }
+    public enum BOTypes {
+        CUSTOMER, ITEM
+    }
 }

@@ -6,14 +6,17 @@ import lk.ijse.gdse66.POS_BackEnd.bo.BOFactory;
 import lk.ijse.gdse66.POS_BackEnd.bo.custom.CustomerBO;
 import lk.ijse.gdse66.POS_BackEnd.dto.CustomerDTO;
 
-import java.io.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 
 @WebServlet(name = "customerServlet", urlPatterns = "/customer")

@@ -17,31 +17,31 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public boolean addItem(Connection connection, ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
-        ItemEntity itemEntity =new  ItemEntity(
-                itemDTO.getItemCode(),itemDTO.getDescription(),itemDTO.getQtyOnHand(),itemDTO.getUnitPrice()
+        ItemEntity itemEntity = new ItemEntity(
+                itemDTO.getItemCode(), itemDTO.getDescription(), itemDTO.getQtyOnHand(), itemDTO.getUnitPrice()
         );
 
-        return itemDAO.add(itemEntity,connection);
+        return itemDAO.add(itemEntity, connection);
     }
 
     @Override
     public ObservableList<ItemDTO> getAllItem(Connection connection) throws SQLException, ClassNotFoundException {
-       ObservableList<ItemEntity> itemEntities = itemDAO.getAll(connection);
+        ObservableList<ItemEntity> itemEntities = itemDAO.getAll(connection);
 
-       ObservableList<ItemDTO> obList = FXCollections.observableArrayList();
+        ObservableList<ItemDTO> obList = FXCollections.observableArrayList();
 
-       for (ItemEntity temp: itemEntities){
-           ItemDTO itemDTO = new ItemDTO(
-                   temp.getItemCode(),
-                   temp.getDescription(),
-                   temp.getQtyOnHand(),
-                   temp.getUnitPrice()
-           );
+        for (ItemEntity temp : itemEntities) {
+            ItemDTO itemDTO = new ItemDTO(
+                    temp.getItemCode(),
+                    temp.getDescription(),
+                    temp.getQtyOnHand(),
+                    temp.getUnitPrice()
+            );
 
-           obList.add(itemDTO);
-       }
+            obList.add(itemDTO);
+        }
 
-       return obList;
+        return obList;
     }
 
     @Override
@@ -65,11 +65,11 @@ public class ItemBOImpl implements ItemBO {
                 itemDTO.getQtyOnHand(),
                 itemDTO.getUnitPrice()
         );
-        return itemDAO.update(itemEntity,connection);
+        return itemDAO.update(itemEntity, connection);
     }
 
     @Override
     public boolean deleteItem(Connection connection, String itemCode) throws SQLException, ClassNotFoundException {
-        return itemDAO.delete(itemCode,connection);
+        return itemDAO.delete(itemCode, connection);
     }
 }

@@ -8,7 +8,7 @@
 <!--    <link rel="stylesheet" href="../assets/css/bootstrap.css">-->
     <style>
         body{
-            background-color: black;
+            /*background-color: black;*/
         }
     </style>
     <script src="assets/js/bootstrap.bundle.js"></script>
@@ -44,7 +44,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Others
+                            OrderDetails
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Action</a></li>
@@ -232,129 +232,169 @@
 
 
 <!-- order section -->
-<main id="orderManage">
+<section id="orderManage">
 <!--    <h2 style="margin: 20px"><i class="fa-solid fa-list-check"></i>   Order Manage</h2>-->
     <h2 style="margin: 20px"><i class="fa-solid fa-list-check"></i>   Order Manage</h2>
-    <section class="mt-4 m-lg-4" >
-        <div class="container text-center mb-3">
-            <div class="row align-items-start">
-                <div class="col">
-
-                    <div class="card border-success " style="max-width: 25rem; height: 280px;">
-                        <div class="card-header text-white bg-success">Invoice Details</div>
-                        <div class="card-body m-3">
-                            <form>
-                                <div class="row">
-                                    <div class="col">
-                                        <input id="txtOrderID" type="text" class="form-control mb-2" placeholder="Order Id" aria-label="First name">
-                                    </div>
-                                    <div class="col">
-                                        <input id="OrderDate" type="text" class="form-control mb-2" placeholder="Last name" aria-label="Last name">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col mb-2">
-                                        <select id="MenuCus" class="form-select" aria-label="Default select example">
-                                            <option selected>Select ID</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <input id="CusAutoName" type="text" class="form-control mb-2" placeholder="Name" aria-label="First name">
-                                    </div>
-                                    <div class="col">
-                                        <input id="CusAutoSalary" type="text" class="form-control mb-2" placeholder="Salary" aria-label="Last name">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <input id="CusAutoAddres" type="text" class="form-control mb-2" placeholder="Address" aria-label="First name">
-                                    </div>
-                                </div>
-                            </form>
+    <section id="placeOrder">
+        <div class="row  container-fluid" style="margin:0; padding: 0 ">
+            <div class=" col-xl-3 col-lg-3 col-md-6 col-12">
+                <div class="card bg-light mt-2 ms-5">
+                    <div class="card-header bg-primary text-white font-weight-bold" style="text-align: center;">Order</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Order ID :</label>
+                            <input class="form-control" disabled id="txtOrderID" type="text">
+                            <span class="control-error"
+                                  id="orderId-invalid-error"></span>
                         </div>
-                    </div>
 
-                </div>
-                <div class="col">
-
-                    <div class="card border-success " style="max-width: 25rem; height: 280px;">
-                        <div class="card-header text-white bg-success">Item Select</div>
-                        <div class="card-body m-3">
-                            <form>
-                                <div class="row">
-                                    <div class="col mb-2">
-                                        <select id="MenuItem" class="form-select" aria-label="Default select example">
-                                            <option selected>Select Code</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <input id="IAutoName" type="text" class="form-control mb-2" placeholder="Item Name" aria-label="First name">
-                                    </div>
-                                    <div class="col">
-                                        <input id="IAutoPrice" type="text" class="form-control mb-2" placeholder="Price" aria-label="Last name">
-                                    </div>
-                                    <div class="col">
-                                        <input id="IAutoQty" type="text" class="form-control mb-2" placeholder="QtyOnH" aria-label="Last name">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <input id="IAutoOrderQty" type="number" class="form-control mb-3" placeholder="Order QTY" aria-label="First name">
-                                    </div>
-                                </div>
-
-                                <button id="OrderSave" type="button" class="btn btn-primary btn-sm">Add Item</button>
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col" style="max-width: 25rem; height: 180px;">
-                    <div class="card" >
-                        <div class="card-body">
-                            <h5 class="card-title">Total</h5>
-                            <h5 class="card-title">Sub Total</h5>
-                            <div class="row">
-                                <div class="col">
-                                    <input  id="CashInput" type="text" class="form-control mb-2" placeholder="Cash" aria-label="Cash">
-                                </div>
-                                <div class="col">
-                                    <input id="DiscountInput"  type="text" class="form-control mb-2" placeholder="Discount" aria-label="Discount">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <input id="BalanceValue" type="text" class="form-control mb-2" placeholder="Balance" aria-label="Balance">
-                                </div>
-                            </div>
-                            <button id="btnPurchase" type="button" class="btn btn-primary btn-sm">Purchase</button>
+                        <div class="form-group">
+                            <label>Date :</label>
+                            <input class="form-control" disabled id="txtOrderDate" type="text">
                         </div>
                     </div>
                 </div>
             </div>
+            <br>
+            <div class=" col-xl-3 col-lg-3 col-md-6 col-12">
+                <div class="card bg-light mt-2 ms-5">
+                    <div class="card-header bg-primary text-white font-weight-bold" style="text-align: center;">Customer Select
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Customer-Id :</label>
+                            <select aria-label="Default select example" class="form-select"
+                                    id="txtOrderCusID">
+                                <option>Select ID</option>
+                            </select>
+                            <span class="control-error" id="cus-empty-error"></span>
+                        </div>
+                        <div class="form-group ">
+                            <label>Customer-Name :</label>
+                            <input class="form-control" disabled id="txtOrderCusName" type="text">
+                        </div>
+                        <div class="form-group ">
+                            <label>Address :</label>
+                            <input class="form-control" disabled id="txtOrderCusAddress" type="text">
+                        </div>
+                        <div class="form-group ">
+                            <label for="txtOrderCusContact">Contact :</label>
+                            <input class="form-control" disabled id="txtOrderCusContact">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-xl-3 col-lg-3 col-md-6 col-12">
+                <div class="card bg-light mt-2 ms-5">
+                    <div class="card-header bg-secondary text-white font-weight-bold" style="text-align: center;">Item Select</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Item-Code :</label>
+                            <select aria-label="Default select example" class="form-select"
+                                    id="txtOrderItemCode">
+                                <option>Select Item</option>
+                            </select>
+                            <span class="control-error"
+                                  id="item-empty-error"></span>
+                        </div>
+                        <div class="form-group ">
+                            <label>Item-Name :</label>
+                            <input class="form-control" disabled id="txtOrderItemName" type="text">
+                        </div>
+                        <div class="form-group ">
+                            <label>Unit-Price :</label>
+                            <input class="form-control" disabled id="txtOrderItemPrice" type="text">
+                        </div>
+                        <div class="form-group ">
+                            <label>QtyOnHand :</label>
+                            <input class="form-control" disabled id="txtOrderItemQtyOnHand" type="text">
+                        </div>
+                        <div class="form-group ">
+                            <label>Order Quantity :</label>
+                            <input class="form-control" id="txtOrderQty" min="1" type="number">
+                            <span class="control-error" id="order-qty-empty-error"></span>
+                        </div>
+                        <br>
+                        <button type="button" id="btnAddToCart" class="btn btn-primary"><i class="fa fa-shopping-cart">&nbsp;</i>Add
+                            To Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <section class="content-box-2 p-4 ">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="" id="total-text">Total : </span>
+                                </div>
+                                <div class="col-12">
+                                    <label id="total"><b>00.0</b></label> Rs/=
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span id="total-text1">SubTotal : </span>
+                                </div>
+                                <div class="col-12">
+                                    <label id="subtotal"><b>00.0</b></label> Rs/=
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6 mt-2">
+                            <div class="form-group">
+                                <label>Cash</label>
+                                <input class="form-control" id="txtCash" min="0" type="number">
+                                <span class="control-error"
+                                      id="cash-empty-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input class="form-control" id="txtDiscount" min="0" type="number">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <div class="form-group">
+                                <label>Balance</label>
+                                <input class="form-control" disabled id="txtBalance" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <button class="btn btn-success mt-3" id="btnSubmitOrder" type="button">Purchase</button>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+            </form>
         </div>
-
-
-        <table class="table table-bordered table-hover">
-            <thead class="table-success bg-success">
-            <tr class="table-success bg-success">
-                <th scope="col">Item code</th>
-                <th scope="col">Item Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Total</th>
-            </tr>
-            </thead>
-            <tbody id="tblOrder">
-
-            </tbody>
-        </table>
+        <div class="table-responsive container-fluid mt-5">
+            <table class="table table-bordered mx-auto ml-sm-0 table-hover" id="tblOrder">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Item Code</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                </tr>
+                </thead>
+                <tbody id="addToCartTable">
+                <tr>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
     </section>
-</main>
+</section>
 
 <script src="assets/jquery-3.7.1.min.js"></script>
 <!--<script src="../assets/js/bootstrap.min.js"></script>-->

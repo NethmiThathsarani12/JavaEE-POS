@@ -18,55 +18,55 @@ public class CustomerBOImpl implements CustomerBO {
     @Override
     public boolean addCustomer(Connection connection, CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
         CustomerEntity customerEntity = new CustomerEntity(
-        customerDTO.getCusId(), customerDTO.getCusName(), customerDTO.getCusAddress(), customerDTO.getCusContact()
+                customerDTO.getCusId(), customerDTO.getCusName(), customerDTO.getCusAddress(), customerDTO.getCusContact()
         );
 
-        return customerDAO.add(customerEntity,connection);
+        return customerDAO.add(customerEntity, connection);
     }
 
     @Override
     public ObservableList<CustomerDTO> getAllCustomer(Connection connection) throws SQLException, ClassNotFoundException {
-       ObservableList<CustomerEntity> customerEntities = customerDAO.getAll(connection);
+        ObservableList<CustomerEntity> customerEntities = customerDAO.getAll(connection);
 
-       ObservableList<CustomerDTO> obList =  FXCollections.observableArrayList();
+        ObservableList<CustomerDTO> obList = FXCollections.observableArrayList();
 
-       for (CustomerEntity temp : customerEntities){
-           CustomerDTO customerDTO = new CustomerDTO(
-                   temp.getId(),
-                   temp.getName(),
-                   temp.getAddress(),
-                   temp.getContact()
-           );
+        for (CustomerEntity temp : customerEntities) {
+            CustomerDTO customerDTO = new CustomerDTO(
+                    temp.getId(),
+                    temp.getName(),
+                    temp.getAddress(),
+                    temp.getContact()
+            );
 
-           obList.add(customerDTO);
-       }
+            obList.add(customerDTO);
+        }
 
-       return obList;
+        return obList;
     }
 
     @Override
     public CustomerDTO searchCustomer(String id, Connection connection) throws SQLException, ClassNotFoundException {
-       CustomerEntity customerEntity = customerDAO.search(id,connection);
+        CustomerEntity customerEntity = customerDAO.search(id, connection);
 
-       CustomerDTO customerDTO = new CustomerDTO(
-               customerEntity.getId(),
-               customerEntity.getName(),
-               customerEntity.getAddress(),
-               customerEntity.getContact()
-       );
-       return customerDTO;
+        CustomerDTO customerDTO = new CustomerDTO(
+                customerEntity.getId(),
+                customerEntity.getName(),
+                customerEntity.getAddress(),
+                customerEntity.getContact()
+        );
+        return customerDTO;
 
     }
 
     @Override
     public boolean updateCustomer(Connection connection, CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
-       CustomerEntity customerEntity = new CustomerEntity(
-               customerDTO.getCusId(),
-               customerDTO.getCusName(),
-               customerDTO.getCusAddress(),
-               customerDTO.getCusContact()
-       );
-       return customerDAO.update(customerEntity,connection);
+        CustomerEntity customerEntity = new CustomerEntity(
+                customerDTO.getCusId(),
+                customerDTO.getCusName(),
+                customerDTO.getCusAddress(),
+                customerDTO.getCusContact()
+        );
+        return customerDAO.update(customerEntity, connection);
     }
 
     @Override

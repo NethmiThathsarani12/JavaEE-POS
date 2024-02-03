@@ -14,7 +14,7 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public boolean add(ItemEntity itemEntity, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection, "INSERT INTO item VALUES(?,?,?,?)",itemEntity.getItemCode(),
+        return CrudUtil.executeUpdate(connection, "INSERT INTO item VALUES(?,?,?,?)", itemEntity.getItemCode(),
                 itemEntity.getDescription(),
                 itemEntity.getQtyOnHand(),
                 itemEntity.getUnitPrice());
@@ -22,11 +22,11 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public ObservableList<ItemEntity> getAll(Connection connection) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.executeQuery(connection ,"SELECT * FROM item" );
+        ResultSet resultSet = CrudUtil.executeQuery(connection, "SELECT * FROM item");
 
         ObservableList<ItemEntity> obList = FXCollections.observableArrayList();
 
-        while (resultSet.next()){
+        while (resultSet.next()) {
             ItemEntity itemEntity = new ItemEntity(
                     resultSet.getString(1),
                     resultSet.getString(2),
@@ -41,32 +41,32 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public ItemEntity search(String code, Connection connection) throws SQLException, ClassNotFoundException {
-        ResultSet rst = CrudUtil.executeQuery(connection , "SELECT * FROM Item WHERE code=?" , code);
-        if (rst.next()){
+        ResultSet rst = CrudUtil.executeQuery(connection, "SELECT * FROM Item WHERE code=?", code);
+        if (rst.next()) {
             return new ItemEntity(
                     rst.getString(1),
                     rst.getString(2),
                     rst.getInt(3),
                     rst.getDouble(4)
             );
-        }else {
+        } else {
             return null;
         }
     }
 
     @Override
     public boolean update(ItemEntity itemEntity, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection,"UPDATE item SET description=?,qtyOnHand=?,unitPrice=? WHERE code=?", itemEntity.getDescription(),
-                itemEntity.getQtyOnHand(),itemEntity.getUnitPrice(),itemEntity.getItemCode());
+        return CrudUtil.executeUpdate(connection, "UPDATE item SET description=?,qtyOnHand=?,unitPrice=? WHERE code=?", itemEntity.getDescription(),
+                itemEntity.getQtyOnHand(), itemEntity.getUnitPrice(), itemEntity.getItemCode());
     }
 
     @Override
     public boolean delete(String itemCode, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection, "DELETE FROM item WHERE code=?" , itemCode );
+        return CrudUtil.executeUpdate(connection, "DELETE FROM item WHERE code=?", itemCode);
     }
 
     @Override
     public boolean updateQtyOnHand(Connection connection, String id, int qty) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection , "UPDATE item SET qtyOnHand=(qtyOnHand - "+ qty +")WHERE code=?", id);
+        return CrudUtil.executeUpdate(connection, "UPDATE item SET qtyOnHand=(qtyOnHand - " + qty + ")WHERE code=?", id);
     }
 }

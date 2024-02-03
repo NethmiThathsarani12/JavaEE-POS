@@ -18,14 +18,12 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-@WebServlet(name = "itemServlet" , urlPatterns = "/item")
+@WebServlet(name = "itemServlet", urlPatterns = "/item")
 public class ItemServlet extends HttpServlet {
 
+    private final ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
     @Resource(name = "java:comp/env/jdbc/pool")
     DataSource dataSource;
-
-    private final ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

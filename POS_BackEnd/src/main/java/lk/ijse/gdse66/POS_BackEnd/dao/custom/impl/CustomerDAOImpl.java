@@ -15,17 +15,17 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     @Override
     public boolean add(CustomerEntity customerEntity, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection, "INSERT INTO company.customer (id,name,address,contact) VALUES(?,?,?,?)" , customerEntity.getId(),
-               customerEntity.getName(),customerEntity.getAddress(),customerEntity.getContact());
+        return CrudUtil.executeUpdate(connection, "INSERT INTO company.customer (id,name,address,contact) VALUES(?,?,?,?)", customerEntity.getId(),
+                customerEntity.getName(), customerEntity.getAddress(), customerEntity.getContact());
     }
 
     @Override
     public ObservableList<CustomerEntity> getAll(Connection connection) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.executeQuery(connection, "SELECT * FROM customer")    ;
+        ResultSet resultSet = CrudUtil.executeQuery(connection, "SELECT * FROM customer");
 
         ObservableList<CustomerEntity> obList = FXCollections.observableArrayList();
 
-        while (resultSet.next()){
+        while (resultSet.next()) {
             CustomerEntity customerEntity = new CustomerEntity(
                     resultSet.getString(1),
                     resultSet.getString(2),
@@ -51,18 +51,18 @@ public class CustomerDAOImpl implements CustomerDAO {
                     rst.getString(3),
                     rst.getString(4)
             );
-        }else {
+        } else {
             return null;
 
         }
 
 
-        }
+    }
 
     @Override
     public boolean update(CustomerEntity customerEntity, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection,"UPDATE customer SET name=?,address=?,contact=? WHERE id=?", customerEntity.getName(),
-                customerEntity.getAddress(),customerEntity.getContact(),customerEntity.getId());
+        return CrudUtil.executeUpdate(connection, "UPDATE customer SET name=?,address=?,contact=? WHERE id=?", customerEntity.getName(),
+                customerEntity.getAddress(), customerEntity.getContact(), customerEntity.getId());
     }
 
     @Override
