@@ -81,12 +81,13 @@ public class PlaceOrderServlet extends HttpServlet {
                     for (OrdersDTO ordersDTO : allOrders) {
 
                         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-                        objectBuilder.add("orderId", ordersDTO.getOid());
-                        objectBuilder.add("cid", ordersDTO.getCustomerID());
-                        objectBuilder.add("orderDate", String.valueOf(ordersDTO.getDate()));
+                        objectBuilder.add("oid", ordersDTO.getOid());
+                        objectBuilder.add("date", String.valueOf(ordersDTO.getDate()));
+                        objectBuilder.add("customerID", ordersDTO.getCustomerID());
                         objectBuilder.add("total", ordersDTO.getTotal());
-                        objectBuilder.add("discount", ordersDTO.getDiscount());
                         objectBuilder.add("subTotal", ordersDTO.getSubTotal());
+                        objectBuilder.add("discount", ordersDTO.getDiscount());
+
                         arrayBuilder.add(objectBuilder.build());
 
                     }
@@ -109,8 +110,7 @@ public class PlaceOrderServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             resp.setContentType("application/json");
             Connection connection = dataSource.getConnection();
@@ -168,8 +168,6 @@ public class PlaceOrderServlet extends HttpServlet {
 
             throwables.printStackTrace();
         }
-
-
     }
 
     @Override
