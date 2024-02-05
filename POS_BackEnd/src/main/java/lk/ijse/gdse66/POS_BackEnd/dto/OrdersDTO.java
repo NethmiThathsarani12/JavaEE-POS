@@ -19,4 +19,10 @@ public class OrdersDTO {
     private double discount;
     private double subTotal;
     private ArrayList<OrderDetailsDTO> orderDetail;
+
+    public OrdersDTO(String oid, String customerId, Date date, double total, double discount, double subTotal) {
+
+    }
+
+
 }
