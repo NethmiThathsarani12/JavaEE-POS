@@ -129,3 +129,18 @@ $("#btnDelete").click(function (){
     }
 
 
+$("#btnSearch").click(function () {
+    let customerID = $("#txtSearchCusID").val();
+    $("#tblCustomer").empty();
+    $.ajax({
+        url: "http://localhost:8080/backEnd/customer?option=SEARCH&cusId=" + customerID,
+        method: "GET",
+        success: function (resp) {
+            let row = `<tr><td>${resp.id}</td><td>${resp.name}</td><td>${resp.address}</td><td>${resp.contact}</td></tr>`;
+            $("#tblCustomer").append(row);
+
+            bindClickEvents();
+        }
+
+    });
+});

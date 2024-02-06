@@ -128,3 +128,18 @@ $("#btnItemDelete").click(function (){
         }
     });
 });
+
+
+$("#btnSearchItem").click(function (){
+    let itemCode = $("#txtSearchItemCode").val();
+    $("#tblItem").empty();
+    $.ajax({
+        url:"http://localhost:8080/backEnd/item?option=SEARCH&iCode=" + itemCode,
+        method:"GET",
+        success:function (resp){
+            let row = `<tr><td>${resp.itemCode}</td><td>${resp.name}</td><td>${resp.qtyOnHand}</td><td>${resp.price}</td></tr>`;
+            $("#tblItem").append(row);
+            bindClickEvent();
+        }
+    });
+});
