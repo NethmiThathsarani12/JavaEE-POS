@@ -51,6 +51,7 @@ lnkOrder.addEventListener("click",function (){
 
     loadItemComboBoxData();
     loadCustomerComboBoxData();
+    // manageBalance();
     
     // loadAllCusID();
     // loadAllItemID();

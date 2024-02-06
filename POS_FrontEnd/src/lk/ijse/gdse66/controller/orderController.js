@@ -28,7 +28,7 @@ generateOrderID();
 function loadAllOrders(){
     $("#orderTable").empty();
     $.ajax({
-        url: "orders?option=GETALL",
+        url: "orders?option= GETALL",
         method: "GET",
         success: function (resp) {
             for (const orders of resp.data) {
@@ -180,7 +180,7 @@ function bindOrderClickEvent() {
         $("#txtOrderItemCode option:selected").text(itemCode);
         $("#txtOrderItemName").val(itemName);
         $("#txtOrderItemPrice").val(unitPrice);
-        $("#txtQty").val(qty);
+        $("#txtOrderQty").val(qty);
 
     });
 }
@@ -329,7 +329,6 @@ function manageDiscount() {
 
 }
 
-
 $("#btnSubmitOrder").click(function () {
 
     let orderDetails = [];
@@ -344,7 +343,7 @@ $("#btnSubmitOrder").click(function () {
         for (let i = 0; i < $("#addToCartTable > tr").length; i++) {
             var OrderDetail = {
                 oId : $("#txtOrderID").val(),
-                itemCode : $("#addToCartTable> tr").children(':nth-child(1)')[i].innerText,
+                itemCode : $("#addToCartTable > tr").children(':nth-child(1)')[i].innerText,
                 qty : $("#addToCartTable > tr").children(':nth-child(4)')[i].innerText,
                 price : $("#addToCartTable > tr").children(':nth-child(3)')[i].innerText,
                 total : $("#addToCartTable > tr").children(':nth-child(5)')[i].innerText
@@ -388,9 +387,7 @@ $("#btnSubmitOrder").click(function () {
         }
     }
 
-
 });
-
 
 function manageBalance() {
     let balance = 0;
@@ -402,7 +399,6 @@ function manageBalance() {
     parseInt($("#txtBalance").val(balance));
 }
 
-
 function itemTextFieldClear() {
     loadItemComboBoxData();
     $("#txtOrderItemQtyOnHand").val("");
@@ -411,14 +407,12 @@ function itemTextFieldClear() {
     $("#txtOrderQty").val("");
 }
 
-
 function customerTextFieldClear() {
     loadCustomerComboBoxData();
     $("#txtOrderCusName").val("");
     $("#txtOrderCusContact").val("");
     $("#txtOrderCusAddress").val("");
 }
-
 
 function bindOrderDetailsClickEvent(){
     $("#orderTable > tr").click('click', function () {
@@ -444,5 +438,6 @@ function bindOrderDetailsClickEvent(){
     });
 }
 
-
 bindOrderDetailsClickEvent();
+
+

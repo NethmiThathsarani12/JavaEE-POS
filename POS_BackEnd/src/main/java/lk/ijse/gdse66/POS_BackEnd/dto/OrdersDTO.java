@@ -21,8 +21,16 @@ public class OrdersDTO {
     private ArrayList<OrderDetailsDTO> orderDetail;
 
     public OrdersDTO(String oid, String customerId, Date date, double total, double discount, double subTotal) {
-
+            this.oid= oid;
+            this.customerID=customerId;
+            this.date=date;
+            this.total= total;
+            this.discount=discount;
+            this.subTotal=subTotal;
     }
 
 
+    public OrdersDTO(String orderID, Date orderDate, String cId, double total, double discount, double subTotal, ArrayList<OrderDetailsDTO> orderDetailsDTOS) {
+
+    }
 }

@@ -12,9 +12,13 @@ import java.sql.Date;
 public class OrdersEntity {
 
     private String oid;
-    private String customerID;
     private Date date;
+    private String customerID;
     private double total;
-    private double discount;
     private double subTotal;
+    private double discount;
+
+    public OrdersEntity(String oid, String customerID, Date date, double total, double discount, double subTotal) {
+
+    }
 }

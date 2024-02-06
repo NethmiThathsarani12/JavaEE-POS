@@ -21,7 +21,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@WebServlet(urlPatterns = "/orders")
+@WebServlet(name = "orderServlet" , urlPatterns = "/orders")
 public class PlaceOrderServlet extends HttpServlet {
 
     @Resource(name = "java:comp/env/jdbc/pool")
@@ -81,13 +81,12 @@ public class PlaceOrderServlet extends HttpServlet {
                     for (OrdersDTO ordersDTO : allOrders) {
 
                         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-                        objectBuilder.add("oid", ordersDTO.getOid());
-                        objectBuilder.add("date", String.valueOf(ordersDTO.getDate()));
-                        objectBuilder.add("customerID", ordersDTO.getCustomerID());
+                        objectBuilder.add("orderId", ordersDTO.getOid());
+                        objectBuilder.add("orderDate", String.valueOf(ordersDTO.getDate()));
+                        objectBuilder.add("cid", ordersDTO.getCustomerID());
                         objectBuilder.add("total", ordersDTO.getTotal());
-                        objectBuilder.add("subTotal", ordersDTO.getSubTotal());
                         objectBuilder.add("discount", ordersDTO.getDiscount());
-
+                        objectBuilder.add("subTotal", ordersDTO.getSubTotal());
                         arrayBuilder.add(objectBuilder.build());
 
                     }
@@ -137,11 +136,11 @@ public class PlaceOrderServlet extends HttpServlet {
 
             OrdersDTO ordersDTO = new OrdersDTO(
                     jsonObject.getString("orderID"),
-                    jsonObject.getString("cId"),
                     Date.valueOf(jsonObject.getString("orderDate")),
+                    jsonObject.getString("cId"),
                     Double.parseDouble(jsonObject.getString("total")),
-                    Double.parseDouble(jsonObject.getString("discount")),
                     Double.parseDouble(jsonObject.getString("subTotal")),
+                    Double.parseDouble(jsonObject.getString("discount")),
                     orderDetailsDTOS
             );
 
