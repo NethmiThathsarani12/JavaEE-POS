@@ -298,3 +298,6 @@ function setButtonCus() {
 $('#btnCustomer').click(function () {
     checkIfValidCus();
 });
+
+
+//--------------validation End----------------------
