@@ -49,8 +49,9 @@ lnkOrder.addEventListener("click",function (){
     OrderDetails.style.display = 'none';
     dash.style.display = 'none';
 
-    loadItemComboBoxData();
-    loadCustomerComboBoxData();
+loadItemComboBoxData();
+loadCustomerComboBoxData();
+
     // manageBalance();
     
     // loadAllCusID();
@@ -67,8 +68,9 @@ lnkOrderDetail.addEventListener("click",function (){
     OrderDetails.style.display = 'block';
     dash.style.display = 'none';
 
-    loadAllOrders();
-    bindOrderDetailsClickEvent();
+loadAllOrders();
+loadAllOrderDetails();
+
 
 
 })

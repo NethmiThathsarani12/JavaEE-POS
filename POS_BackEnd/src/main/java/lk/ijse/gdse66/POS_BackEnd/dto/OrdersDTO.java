@@ -5,32 +5,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrdersDTO {
 
     private String oid;
-    private String customerID;
     private Date date;
-    private double total;
-    private double discount;
-    private double subTotal;
-    private ArrayList<OrderDetailsDTO> orderDetail;
+    private String customerID;
 
-    public OrdersDTO(String oid, String customerId, Date date, double total, double discount, double subTotal) {
-            this.oid= oid;
-            this.customerID=customerId;
-            this.date=date;
-            this.total= total;
-            this.discount=discount;
-            this.subTotal=subTotal;
-    }
+//    public OrdersDTO(String oid , String date, String customerID){
+//
+//    }
 
-
-    public OrdersDTO(String orderID, Date orderDate, String cId, double total, double discount, double subTotal, ArrayList<OrderDetailsDTO> orderDetailsDTOS) {
-
-    }
 }

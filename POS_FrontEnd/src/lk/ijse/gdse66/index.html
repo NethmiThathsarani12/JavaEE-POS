@@ -12,6 +12,8 @@
         }
     </style>
     <script src="assets/js/bootstrap.bundle.js"></script>
+    <script src="util/sweetalert2-11.6.16/sweetalert2.all.js"></script>
+
 
 </head>
 <body>
@@ -339,6 +341,7 @@
                             <label>Order Quantity :</label>
                             <input class="form-control" id="txtOrderQty" min="1" type="number">
                             <span class="control-error" id="order-qty-empty-error"></span>
+                            <strong class="control-error" id="lblCheckQty"></strong>
                         </div>
                         <br>
                         <button type="button" id="btnAddToCart" class="btn btn-primary"><i class="fa fa-shopping-cart">&nbsp;</i>Add
@@ -347,57 +350,40 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3">
-                <section class="content-box-2 p-4 ">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-12">
-                                    <span class="" id="total-text">Total : </span>
-                                </div>
-                                <div class="col-12">
-                                    <label id="total"><b>00.0</b></label> Rs/=
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-12">
-                                    <span id="total-text1">SubTotal : </span>
-                                </div>
-                                <div class="col-12">
-                                    <label id="subtotal"><b>00.0</b></label> Rs/=
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-6 mt-2">
-                            <div class="form-group">
-                                <label>Cash</label>
-                                <input class="form-control" id="txtCash" min="0" type="number">
-                                <span class="control-error"
-                                      id="cash-empty-error"></span>
-                            </div>
-                        </div>
-                        <div class="col-6 mt-2">
-                            <div class="form-group">
-                                <label>Discount</label>
-                                <input class="form-control" id="txtDiscount" min="0" type="number">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <div class="form-group">
-                                <label>Balance</label>
-                                <input class="form-control" disabled id="txtBalance" type="text">
-                            </div>
-                        </div>
-                        <div class="col-12 mt-2">
-                            <button class="btn btn-success mt-3" id="btnSubmitOrder" type="button">Purchase</button>
-                        </div>
+            <div class="col-10 col-md-5 col-lg-3 p-3 mt-3 rounded-3 sectionBorder" style="background-color: white">
+                <h5 class="text-center bg-secondary p-2 text-light rounded-3">Payment Details</h5>
+                <div class="row mt-1">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label class="fw-bold" for="txtTotal">Total :</label>
+                        <input class="form-control border-dark" disabled id="txtTotal" type="number">
                     </div>
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label class="fw-bold" for="txtDiscount">Discount :</label>
+                        <input class="form-control border-dark" id="txtDiscount" role="spinbutton" type="number">
+                    </div>
+                </div>
 
-                </section>
+                <div class="row mt-1">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label class="fw-bold" for="txtSubTotal">Sub Total :</label>
+                        <input class="form-control border-dark" disabled id="txtSubTotal" type="number">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label class="fw-bold" for="txtCash">Cash :</label>
+                        <input class="form-control border-dark" id="txtCash" type="text">
+                        <strong class="control-error" id="lblCheckSubtotal"></strong>
+                    </div>
+                </div>
+
+                <div class="row mt-1">
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <label class="fw-bold" for="txtBalance">Balance :</label>
+                        <input class="form-control border-dark" disabled id="txtBalance" type="number">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-6 mt-4">
+                        <button class="btn btn-success rounded-2" id="btnPurchase" type="submit">Purchase</button>
+                    </div>
+                </div>
             </div>
             </form>
         </div>
@@ -425,39 +411,36 @@
 <section id="orderDetails">
     <div class="container-fluid mt-5">
         <section class="row mt-4">
-            <div class="col" style="height:350px; overflow-y: scroll">
-                <table class="table table-hover">
-                    <thead class="bg-primary text-white">
-                    <tr class="head">
-                        <th>Order ID</th>
-                        <th>Customer Id</th>
-                        <th>Date</th>
-                        <th>Total</th>
-                        <th>Discount</th>
-                        <th>Sub Total</th>
-                    </tr>
-                    </thead>
-                    <tbody id="orderTable">
-
-                    </tbody>
-                </table>
+            <div class="col-11 justify-content-around " style="height: 250px;">
+                <div class="PlaceOrderTableDiv overflow-auto" style="height: 230px;">
+                    <table class="table table-success table-striped table-bordered table-hover">
+                        <thead class="text-light table-dark text-center  table-bordered sticky-top">
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Order Date</th>
+                            <th>Customer Id</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tblOrderCus"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
         <section class="row">
-            <div class="col mt-3" style="height:300px; overflow-y: scroll">
-                <table class="table table-hover">
-                    <thead class="bg-primary text-white">
-                    <tr class="head">
-                        <th>Order ID</th>
-                        <th>Item Code</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Total</th>
-                    </tr>
-                    </thead>
-                    <tbody id="orderDetailTable">
-                    </tbody>
-                </table>
+            <div class="col-11 justify-content-around " style="height: 250px;">
+                <div class="PlaceOrderTableDiv overflow-auto" style="height: 230px;">
+                    <table class="table table-success table-striped table-bordered table-hover">
+                        <thead class="text-light table-dark text-center  table-bordered sticky-top">
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Item Code</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tblOrderDetails"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </div>
@@ -478,6 +461,12 @@
 <script src="controller/itemController.js"></script>
 
 <script src="controller/orderController.js"></script>
+
+<script src="controller/PurchaseOrderController.js"></script>
+
+<script src="util/validation.js"></script>
+
+<script src="util/alert.js"></script>
 <script>
 
     

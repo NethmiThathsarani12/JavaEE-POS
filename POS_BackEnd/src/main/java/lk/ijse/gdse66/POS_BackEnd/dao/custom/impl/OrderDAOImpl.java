@@ -9,48 +9,41 @@ import lk.ijse.gdse66.POS_BackEnd.entity.OrdersEntity;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class OrderDAOImpl implements OrderDAO {
-    @Override
-    public boolean add(OrdersEntity ordersEntity, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection, "INSERT INTO orders VALUES (?,?,?,?,?,?)",
-                ordersEntity.getOid(),
-                ordersEntity.getDate(),
-                ordersEntity.getCustomerID(),
-                ordersEntity.getTotal(),
-                ordersEntity.getSubTotal(),
-                ordersEntity.getDiscount());
-    }
+public class OrderDAOImpl implements OrderDAO  {
+
 
     @Override
-    public ObservableList<OrdersEntity> getAll(Connection connection) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.executeQuery(connection, "SELECT * FROM orders");
+    public ArrayList<OrdersEntity> getAll(Connection connection) throws SQLException, ClassNotFoundException {
 
-        ObservableList<OrdersEntity> obList = FXCollections.observableArrayList();
 
-        while (resultSet.next()) {
-            OrdersEntity ordersEntity = new OrdersEntity(
-                    resultSet.getString(1),
-                    resultSet.getDate(2),
-                    resultSet.getString(3),
-                    resultSet.getDouble(4),
-                    resultSet.getDouble(5),
-                    resultSet.getDouble(6)
-            );
-            obList.add(ordersEntity);
+        ResultSet result = CrudUtil.executeQuery(connection,"SELECT * FROM orders" );
+
+        ArrayList<OrdersEntity> obList = new ArrayList<>();
+        while (result.next()){
+            obList.add(new OrdersEntity(
+                    result.getString(1),
+                    result.getDate(2),
+                    result.getString(3)
+            ));
         }
-
         return obList;
     }
 
     @Override
-    public OrdersEntity search(String s, Connection connection) throws SQLException, ClassNotFoundException {
-        return null;
+    public boolean save(OrdersEntity dto, Connection connection) throws SQLException, ClassNotFoundException {
+        return CrudUtil.executeUpdate(connection , "INSERT INTO orders VALUES(?,?,?)" , dto.getOid(), dto.getDate(),dto.getCustomerID());
     }
 
     @Override
-    public boolean update(OrdersEntity ordersEntity, Connection connection) throws SQLException, ClassNotFoundException {
+    public boolean update(OrdersEntity dto, Connection connection) throws SQLException, ClassNotFoundException {
         return false;
+    }
+
+    @Override
+    public ArrayList<OrdersEntity> searchId(String id, Connection connection) throws SQLException, ClassNotFoundException {
+        return null;
     }
 
     @Override
@@ -59,19 +52,18 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public boolean ifOrderExist(String oid, Connection connection) throws SQLException, ClassNotFoundException {
-        return false;
+    public String generateNewID(Connection connection) throws SQLException, ClassNotFoundException {
+
+        ResultSet result = CrudUtil.executeQuery(connection ,"SELECT oid FROM orders ORDER BY oid DESC LIMIT 1" );
+        if (result.next()){
+            return result.getString(1);
+        }else {
+            return null;
+        }
     }
 
     @Override
-    public String generateNewOrderId(Connection connection) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.executeQuery(connection, "SELECT oid FROM orders ORDER BY oid DESC LIMIT 1");
-
-        if (resultSet.next()) {
-            return resultSet.getString(1);
-        } else {
-            return null;
-        }
-
+    public boolean mangeItems(int qty, String code, Connection connection) throws SQLException, ClassNotFoundException {
+        return CrudUtil.executeUpdate(connection,"UPDATE item SET qtyOnHand=qtyOnHand-? WHERE code=?" , qty, code);
     }
 }

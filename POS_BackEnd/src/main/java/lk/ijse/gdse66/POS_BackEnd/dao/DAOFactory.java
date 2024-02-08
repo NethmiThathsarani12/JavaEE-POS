@@ -1,9 +1,6 @@
 package lk.ijse.gdse66.POS_BackEnd.dao;
 
-import lk.ijse.gdse66.POS_BackEnd.dao.custom.impl.CustomerDAOImpl;
-import lk.ijse.gdse66.POS_BackEnd.dao.custom.impl.ItemDAOImpl;
-import lk.ijse.gdse66.POS_BackEnd.dao.custom.impl.OrderDAOImpl;
-import lk.ijse.gdse66.POS_BackEnd.dao.custom.impl.OrderDetailsDAOImpl;
+import lk.ijse.gdse66.POS_BackEnd.dao.custom.impl.*;
 
 public class DAOFactory {
 
@@ -24,13 +21,15 @@ public class DAOFactory {
         switch (types) {
             case CUSTOMER:
                 return new CustomerDAOImpl();
+            case CUSTOM:
+                return new QueryDAOImpl();
             case ITEM:
-                return new ItemDAOImpl();
+               return new ItemDAOImpl();
             case ORDERS:
-                return new OrderDAOImpl();
+               return new OrderDAOImpl();
 
             case ORDERDETAILS:
-                return new OrderDetailsDAOImpl();
+          return new OrderDetailsDAOImpl();
 
             default:
                 return null;
@@ -39,6 +38,6 @@ public class DAOFactory {
 
 
     public enum DAOTypes {
-        CUSTOMER, ITEM , ORDERS,ORDERDETAILS
+        CUSTOMER,CUSTOM, ITEM , ORDERS,ORDERDETAILS
     }
 }

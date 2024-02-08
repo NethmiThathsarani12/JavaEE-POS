@@ -14,11 +14,8 @@ public class OrdersEntity {
     private String oid;
     private Date date;
     private String customerID;
-    private double total;
-    private double subTotal;
-    private double discount;
+//    private double total;
+//    private double subTotal;
+//    private double discount;
 
-    public OrdersEntity(String oid, String customerID, Date date, double total, double discount, double subTotal) {
-
-    }
 }
