@@ -1,12 +1,12 @@
 package lk.ijse.gdse66.POS_BackEnd.servlet;
 
 import jakarta.json.*;
+import javafx.collections.ObservableList;
 import lk.ijse.gdse66.POS_BackEnd.bo.BOFactory;
 import lk.ijse.gdse66.POS_BackEnd.bo.custom.OrderBO;
-import lk.ijse.gdse66.POS_BackEnd.bo.custom.OrderDetailsBO;
 import lk.ijse.gdse66.POS_BackEnd.bo.custom.QueryBO;
-import lk.ijse.gdse66.POS_BackEnd.dto.OrderDetailsDTO;
-import lk.ijse.gdse66.POS_BackEnd.dto.OrdersDTO;
+import lk.ijse.gdse66.POS_BackEnd.dto.OrderDetailDTO;
+import lk.ijse.gdse66.POS_BackEnd.dto.OrderDTO;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -25,240 +25,182 @@ import java.util.ArrayList;
 @WebServlet(urlPatterns = "/orders")
 public class OrdersServlet extends HttpServlet {
 
-    private final QueryBO queryBO = (QueryBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOM);
-    private final OrderBO orderBO = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ORDERS);
-    private final OrderDetailsBO orderDetailBO = (OrderDetailsBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ORDERDETAILS);
 
     @Resource(name = "java:comp/env/jdbc/pool")
     DataSource dataSource;
 
+    OrderBO orderBO = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ORDERS);
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        System.out.println("this is do POst");
-
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("order-doget");
         resp.setContentType("application/json");
         resp.addHeader("Access-Control-Allow-Origin", "*");
+        try {
+
+            String option = req.getParameter("option");
+            Connection connection = dataSource.getConnection();
+            PrintWriter writer = resp.getWriter();
+
+            switch (option){
+                case "Id":
+                    try {
+                        String orderId = orderBO.generateNewOrderId(connection);
+
+                        JsonObjectBuilder ordID = Json.createObjectBuilder();
+                        if (orderId != null) {
+                            ordID.add("oid", orderId);
+                        } else {
+                            System.out.println("id not genarate");
+                            // Handle the case where orderId is null, if needed.
+                        }
+                        writer.print(ordID.build());
 
 
-        JsonReader reader = Json.createReader(req.getReader());
-        JsonObject jsonObject = reader.readObject();
-        JsonArray oDetail = jsonObject.getJsonArray("detail");
-
-        String customerId = jsonObject.getString("customerId");
-        Date date = Date.valueOf(jsonObject.getString("date"));
-        String orderId = jsonObject.getString("orderId");
-
-        try (Connection connection = dataSource.getConnection()) {
-            connection.setAutoCommit(false);
-
-
-            OrdersDTO ordersDTO = new OrdersDTO(orderId, date, customerId);
-            boolean b = orderBO.purchaseOrder(ordersDTO, connection);
-            if (!(b)) {
-                connection.rollback();
-                connection.setAutoCommit(true);
-
-                JsonObjectBuilder rjo = Json.createObjectBuilder();
-                rjo.add("state", "Error");
-                rjo.add("message", "Order Issue");
-                rjo.add("data", "");
-                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                resp.getWriter().print(rjo.build());
-            } else {
-                for (JsonValue orderDetail : oDetail) {
-                    JsonObject object = orderDetail.asJsonObject();
-
-                    String orId = object.getString("orderId");
-                    String itId = object.getString("itemId");
-                    int qty = Integer.parseInt(object.getString("qty"));
-                    double price = Double.parseDouble(object.getString("unitPrice"));
-
-                    OrderDetailsDTO orderDetailDTO = new OrderDetailsDTO(orId, itId, qty, price);
-                    boolean b1 = orderDetailBO.purchaseOrderDetails(orderDetailDTO, connection);
-
-                    if (!(b1)) {
-                        connection.rollback();
-                        connection.setAutoCommit(true);
+                    } catch (SQLException | ClassNotFoundException e) {
 
                         JsonObjectBuilder rjo = Json.createObjectBuilder();
                         rjo.add("state", "Error");
-                        rjo.add("message", "Order Details Issue");
+                        rjo.add("message", e.getLocalizedMessage());
                         rjo.add("data", "");
                         resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                         resp.getWriter().print(rjo.build());
                     }
-                }
-                connection.commit();
-                connection.setAutoCommit(true);
 
-                JsonObjectBuilder job = Json.createObjectBuilder();
-                job.add("state", "Ok");
-                job.add("message", "Successfully Place Order..!");
-                job.add("data", "");
-                resp.getWriter().print(job.build());
+                    break;
+
+                case "get":
+                    ObservableList<OrderDTO> allOrders = orderBO.getAllOrders(connection);
+                    JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+
+                    for (OrderDTO ordersDTO : allOrders) {
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        objectBuilder.add("oid", ordersDTO.getOid());
+                        objectBuilder.add("date", String.valueOf(ordersDTO.getDate()));
+                        objectBuilder.add("customerID", ordersDTO.getCustomerID());
+                        objectBuilder.add("total", ordersDTO.getTotal());
+                        objectBuilder.add("subTotal", ordersDTO.getSubTotal());
+                        objectBuilder.add("discount", ordersDTO.getDiscount());
+                        arrayBuilder.add(objectBuilder.build());
+
+                    }
+
+                    JsonObjectBuilder response = Json.createObjectBuilder();
+                    response.add("status", 200);
+                    response.add("message", "Done");
+                    response.add("data", arrayBuilder.build());
+                    writer.print(response.build());
+
+                    break;
+
+                case "orderDetail":
+                    ObservableList<OrderDetailDTO> allOrderDetail = orderBO.getAllOrdersDetails(connection);
+                    JsonArrayBuilder arrayBuilder1 = Json.createArrayBuilder();
+
+                    for (OrderDetailDTO orderDTO : allOrderDetail) {
+                        JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                        objectBuilder.add("oid", orderDTO.getOid());
+                        objectBuilder.add("itemCode", orderDTO.getItemCode());
+                        objectBuilder.add("qty", orderDTO.getQty());
+                        objectBuilder.add("unitPrice", orderDTO.getUnitPrice());
+                        objectBuilder.add("total", orderDTO.getTotal());
+                        arrayBuilder1.add(objectBuilder.build());
+
+                    }
+
+                    JsonObjectBuilder response1 = Json.createObjectBuilder();
+                    response1.add("status", 200);
+                    response1.add("message", "Done");
+                    response1.add("data", arrayBuilder1.build());
+                    writer.print(response1.build());
+
+                    break;
 
             }
+            connection.close();
 
-        } catch (SQLException | ClassNotFoundException e) {
-            JsonObjectBuilder rjo = Json.createObjectBuilder();
-            rjo.add("state", "Error");
-            rjo.add("message", e.getLocalizedMessage());
-            rjo.add("data", "");
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().print(rjo.build());
-
-
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
         }
     }
 
-
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        System.out.println("this is do put");
-        resp.setContentType("application/json");
-        resp.addHeader("Access-Control-Allow-Origin", "*");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("order-dopost");
 
 
+        try {
+            resp.setContentType("application/json");
+            Connection connection = dataSource.getConnection();
+            PrintWriter writer = resp.getWriter();
 
-        JsonReader reader = Json.createReader(req.getReader());
-        JsonObject jsonObject = reader.readObject();
-        JsonArray oDetail = jsonObject.getJsonArray("detail");
-        try (Connection connection = dataSource.getConnection()) {
-            for (JsonValue orderDetail : oDetail) {
-                JsonObject object = orderDetail.asJsonObject();
+            resp.addHeader("Access-Control-Allow-Origin", "*");
 
-                String orId = object.getString("orderId");
-                String itId = object.getString("itemId");
-                int qty = Integer.parseInt(object.getString("qty"));
-                double price = Double.parseDouble(object.getString("unitPrice"));
+            JsonReader reader = Json.createReader(req.getReader());
+            JsonObject jsonObject = reader.readObject();
+            JsonArray OrderDetaill = jsonObject.getJsonArray("OrderDetail");
 
-                orderBO.mangeItems(qty, itId, connection);
-
+            ArrayList<OrderDetailDTO> order = new ArrayList<>();
+            for (JsonValue orderDetail: OrderDetaill) {
+                JsonObject asJsonObject = orderDetail.asJsonObject();
+                order.add(new OrderDetailDTO(
+                        asJsonObject.getString("oid"),
+                        asJsonObject.getString("itemCode"),
+                        Integer.parseInt(asJsonObject.getString("qty")),
+                        Double.parseDouble(asJsonObject.getString("unitPrice")),
+                        Double.parseDouble(asJsonObject.getString("total"))
+                ));
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            OrderDTO ordersDTO = new OrderDTO(
+                    jsonObject.getString("oid"),
+                    Date.valueOf(jsonObject.getString("date")),
+                    jsonObject.getString("customerID"),
+                    Double.parseDouble(jsonObject.getString("total")),
+                    Double.parseDouble(jsonObject.getString("subTotal")),
+                    Integer.parseInt(jsonObject.getString("discount")),
+                    order
+            );
 
-        System.out.println("this is doGet");
-        resp.setContentType("application/json");
-        resp.addHeader("Access-Control-Allow-Origin", "*");
-//        resp.setContentType("application/json");
 
-        JsonArrayBuilder allOrders = Json.createArrayBuilder();
-        JsonArrayBuilder allOrderDetails = Json.createArrayBuilder();
 
-        String option = req.getParameter("option");
-        PrintWriter writer = resp.getWriter();
+            if (orderBO.saveOrder(connection, ordersDTO)){
+                resp.setStatus(HttpServletResponse.SC_OK);
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                objectBuilder.add("status",resp.getStatus());
+                objectBuilder.add("message","Successfully Added");
+                objectBuilder.add("data","");
 
-        switch (option) {
-            case "OrderIdGenerate":
-                try (Connection connection = dataSource.getConnection()) {
-                    String orderId = orderBO.generateNewOrder(connection);
+                writer.print(objectBuilder.build());
+            }
 
-                    JsonObjectBuilder ordID = Json.createObjectBuilder();
-                    ordID.add("orderId", orderId);
-                    writer.print(ordID.build());
+        } catch (SQLException | ClassNotFoundException throwables) {
 
-                } catch (SQLException | ClassNotFoundException e) {
+            resp.setStatus(HttpServletResponse.SC_OK);
+            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+            objectBuilder.add("status", resp.getStatus());
+            objectBuilder.add("message", "Error");
+            objectBuilder.add("data", throwables.getLocalizedMessage());
+            throwables.printStackTrace();
 
-                    JsonObjectBuilder rjo = Json.createObjectBuilder();
-                    rjo.add("state", "Error");
-                    rjo.add("message", e.getLocalizedMessage());
-                    rjo.add("data", "");
-                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    resp.getWriter().print(rjo.build());
+            throwables.printStackTrace();
+        }finally {
+            Connection connection = null;
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-
-                break;
-            case "LoadOrders":
-                try (Connection connection = dataSource.getConnection()) {
-                    ArrayList<OrdersDTO> orderDTOS = orderBO.getAllOrders(connection);
-
-                    for (OrdersDTO orderDTO : orderDTOS) {
-                        JsonObjectBuilder order = Json.createObjectBuilder();
-                        order.add("orderId", orderDTO.getOid());
-                        order.add("date", String.valueOf(orderDTO.getDate()));
-                        order.add("cusId", orderDTO.getCustomerID());
-                        allOrders.add(order.build());
-                    }
-
-                    JsonObjectBuilder job = Json.createObjectBuilder();
-                    job.add("state", "Ok");
-                    job.add("message", "Successfully Loaded..!");
-                    job.add("data", allOrders.build());
-                    resp.getWriter().print(job.build());
-
-                } catch (ClassNotFoundException | SQLException e) {
-                    JsonObjectBuilder rjo = Json.createObjectBuilder();
-                    rjo.add("state", "Error");
-                    rjo.add("message", e.getLocalizedMessage());
-                    rjo.add("data", "");
-                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    resp.getWriter().print(rjo.build());
-                }
-                break;
-            case "LoadOrderDetails":
-                try (Connection connection = dataSource.getConnection()) {
-                    ArrayList<OrderDetailsDTO> orderDetailDTO = orderDetailBO.getAllOrderDetails(connection);
-
-                    for (OrderDetailsDTO customerDTO : orderDetailDTO) {
-                        JsonObjectBuilder orderDetails = Json.createObjectBuilder();
-                        orderDetails.add("OrderId", customerDTO.getOid());
-                        orderDetails.add("code", customerDTO.getItemCode());
-                        orderDetails.add("qty", customerDTO.getQty());
-                        orderDetails.add("unitPrice", customerDTO.getTotal());
-                        allOrderDetails.add(orderDetails.build());
-                    }
-
-                    JsonObjectBuilder job = Json.createObjectBuilder();
-                    job.add("state", "Ok");
-                    job.add("message", "Successfully Loaded..!");
-                    job.add("data", allOrderDetails.build());
-                    resp.getWriter().print(job.build());
-
-                } catch (ClassNotFoundException | SQLException e) {
-                    JsonObjectBuilder rjo = Json.createObjectBuilder();
-                    rjo.add("state", "Error");
-                    rjo.add("message", e.getLocalizedMessage());
-                    rjo.add("data", "");
-                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    resp.getWriter().print(rjo.build());
-                }
-                break;
-            case "ordersCount":
-                try (Connection connection = dataSource.getConnection()) {
-                    int countOrders = queryBO.getSumOrders(connection);
-
-                    JsonObjectBuilder count = Json.createObjectBuilder();
-                    count.add("count", countOrders);
-                    writer.print(count.build());
-
-
-                } catch (SQLException | ClassNotFoundException e) {
-
-                    JsonObjectBuilder rjo = Json.createObjectBuilder();
-                    rjo.add("state", "Error");
-                    rjo.add("message", e.getLocalizedMessage());
-                    rjo.add("data", "");
-                    resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                    resp.getWriter().print(rjo.build());
-                }
-                break;
+            }
         }
     }
 
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.addHeader("Content-Type", "application/json");
         resp.addHeader("Access-Control-Allow-Origin", "*");
-        resp.addHeader("Access-Control-Allow-Methods", "DELETE, PUT , POST");
         resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
+        resp.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, HEAD");
+}
 
-    }
 }

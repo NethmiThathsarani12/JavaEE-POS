@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lk.ijse.gdse66.POS_BackEnd.dao.CrudUtil;
 import lk.ijse.gdse66.POS_BackEnd.dao.custom.OrderDetailsDAO;
-import lk.ijse.gdse66.POS_BackEnd.entity.OrderDetailsEntity;
+import lk.ijse.gdse66.POS_BackEnd.entity.OrderDetails;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,38 +14,9 @@ import java.util.ArrayList;
 public class OrderDetailsDAOImpl implements OrderDetailsDAO {
 
     @Override
-    public ArrayList<OrderDetailsEntity> getAll(Connection connection) throws SQLException, ClassNotFoundException {
-        ResultSet result = CrudUtil.executeQuery(connection, "SELECT * FROM `orderdetails`");
-
-        ArrayList<OrderDetailsEntity> orderDetailDTO = new ArrayList<>();
-        while (result.next()) {
-            orderDetailDTO.add(new OrderDetailsEntity(
-                    result.getString(1),
-                    result.getString(2),
-                    result.getInt(3),
-                    result.getDouble(4)
-
-            ));
-
-        }
-        return orderDetailDTO;
-    }
-
-    @Override
-    public boolean save(OrderDetailsEntity dto, Connection connection) throws SQLException, ClassNotFoundException {
-        return CrudUtil.executeUpdate(connection,"INSERT INTO orderdetails VALUES(?,?,?,?)" , dto.getOid(),
-                dto.getItemCode(),dto.getQty(), dto.getTotal());
-
-    }
-
-    @Override
-    public boolean update(OrderDetailsEntity dto, Connection connection) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public ArrayList<OrderDetailsEntity> searchId(String id, Connection connection) throws SQLException, ClassNotFoundException {
-        return null;
+    public boolean add(OrderDetails orderDetails, Connection connection) throws SQLException, ClassNotFoundException {
+        return CrudUtil.executeUpdate(connection,"INSERT INTO orderdetails VALUES (?,?,?,?,?)",orderDetails.getOid(),
+                orderDetails.getItemCode(), orderDetails.getQty(), orderDetails.getUnitPrice(), orderDetails.getTotal());
     }
 
     @Override
@@ -54,7 +25,39 @@ public class OrderDetailsDAOImpl implements OrderDetailsDAO {
     }
 
     @Override
-    public String generateNewID(Connection connection) throws SQLException, ClassNotFoundException {
+    public ObservableList<OrderDetails> getAll(Connection connection) throws SQLException, ClassNotFoundException {
+        ResultSet resultSet = CrudUtil.executeQuery(connection, "SELECT * FROM orderdetails");
+
+        ObservableList<OrderDetails> obList = FXCollections.observableArrayList();
+
+        while (resultSet.next()) {
+            OrderDetails orderDetails = new OrderDetails(
+                    resultSet.getString(1),
+                    resultSet.getString(2),
+                    resultSet.getInt(3),
+                    resultSet.getDouble(4),
+                    resultSet.getDouble(5)
+            );
+
+            obList.add(orderDetails);
+        }
+
+        return obList;
+    }
+
+    @Override
+    public boolean update(OrderDetails orderDetails, Connection connection) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public OrderDetails search(String s, Connection connection) throws SQLException, ClassNotFoundException {
         return null;
     }
+
+    @Override
+    public ArrayList<OrderDetails> searchOrderDetail(String id, Connection connection) throws SQLException, ClassNotFoundException {
+        return null;
+}
+
 }

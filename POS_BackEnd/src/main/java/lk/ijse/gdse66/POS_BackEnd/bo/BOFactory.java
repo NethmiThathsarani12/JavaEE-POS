@@ -30,8 +30,7 @@ public class BOFactory {
             case ORDERS:
                 return new OrderBOImpl();
 
-            case ORDERDETAILS:
-                return new OrderDetailsBOImpl();
+
             default:
                 return null;
         }
@@ -39,6 +38,6 @@ public class BOFactory {
     }
 
     public enum BOTypes {
-        CUSTOMER, ITEM , ORDERS , ORDERDETAILS, CUSTOM
+        CUSTOMER, ITEM , ORDERS , CUSTOM
     }
 }
